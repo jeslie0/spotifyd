@@ -1,0 +1,3 @@
+#+title: ReadMe
+
+This is a flake giving a recent build (greater than tag v0.3.3) of [[https://github.com/Spotifyd/spotifyd][spotifyd]]. In particular, my media buttons just work(TM) with this version.
