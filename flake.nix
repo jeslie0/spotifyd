@@ -1,31 +1,30 @@
 {
   description = "A very basic flake";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/79d3ca08920364759c63fd3eb562e99c0c17044a";
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
   outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
       let pkgs = nixpkgs.legacyPackages.${system};
+          system = "x86_64-linux";
           withALSA = true;
           withPulseAudio = true;
           withPortAudio = true;
           withMpris = true;
           withKeyring = true;
           spotifyd = pkgs.fetchgit {
-            url = "https://github.com/Spotifyd/spotifyd";
+            url = "github:Spotifyd/spotifyd";
             rev = "a4316df958b1d29c5b22c318ee00f6df96f9c6c7";
             sha256 = "sha256-hIbWuiterZ8S0GNInqmQl6V6aK08Eq+AZ89Vv8U69+s";
           };
       in
         {
-          defaultPackage = pkgs.rustPackages.rustPlatform.buildRustPackage rec {
-            name = "spotifyd-full";
+          packages.${system}.default = (pkgs.rustPackages.rustPlatform.buildRustPackage rec {
+            name = "spotifyd";
 
             src = spotifyd;
 
-            cargoSha256 = "sha256-JsnGKNlsjV/IJGXdl/cqrXjyff8KTYvgOSHLENJne8A=";
+            cargoSha256 = "sha256-zlGmCBqzl9Wo/0i+SY9AalkkjrhKQue2JEfNSYewZG0=";
 
             nativeBuildInputs = [ pkgs.pkg-config ];
 
@@ -54,8 +53,9 @@
               maintainers = with maintainers; [ anderslundstedt Br1ght0ne marsam ];
               platforms = platforms.unix;
             };
-          };
-        }
-    );
+          }
+          );
+        };
+    # );
 
 }
